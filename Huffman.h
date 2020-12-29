@@ -24,6 +24,7 @@ private:
 
     void printHelper(Node *, std::string trace);
     void lookupHelper(Node *, BinaryBuffer trace, bool first);
+    Node *decerializeHelper(std::ifstream &);
 public:
     Huffman() : root(nullptr) {};
     Huffman(const Huffman &);
@@ -31,10 +32,11 @@ public:
     ~Huffman();
 
     void createTree();
-    bool exportAt(std::ifstream &, std::ofstream &);
     void addSymbol(std::ifstream &);
     void addSymbol(const std::string &);
     void addSymbol(const std::string &, const int);
+    bool serialize(std::ifstream &, std::ofstream &);
+    bool deserialize(std::ifstream &, std::ofstream &);
     void printTree();
 };
 

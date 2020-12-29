@@ -44,6 +44,20 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "atomic": "cpp",
+        "chrono": "cpp",
+        "csignal": "cpp",
+        "ctime": "cpp",
+        "iomanip": "cpp",
+        "map": "cpp",
+        "mutex": "cpp",
+        "ratio": "cpp",
+        "set": "cpp",
+        "sstream": "cpp",
+        "thread": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp",
+        "xtree": "cpp"
     }
 }

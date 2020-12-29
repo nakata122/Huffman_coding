@@ -1,4 +1,5 @@
 #include "Huffman.h"
+#include <stack>
 #include <queue>
 #include <vector>
 #include <iostream>
@@ -94,27 +95,25 @@ void Huffman::printHelper(Node *current, std::string trace)
     printHelper(current->right, trace+'1');
 }
 
-bool Huffman::exportAt(std::ifstream &from, std::ofstream &to)
+bool Huffman::serialize(std::ifstream &from, std::ofstream &to)
 {
-    //BFS header
-    // to.write((char *)&numNodes, 4);
+    //DFS header
+    std::stack<Node *> q;
+    q.push(root);
 
-    // std::queue<Node *> q;
-    // q.push(root);
+    while(!q.empty())
+    {
+        Node *curr = q.top();
+        q.pop();
 
-    // while(!q.empty())
-    // {
-    //     Node *curr = q.front();
-    //     q.pop();
-
-    //     if(curr != nullptr)
-    //     {
-    //         q.push(curr->left);
-    //         q.push(curr->right);
-
-    //         to.write(curr->data.c_str(), 1);
-    //     }
-    // }
+        if(curr != nullptr)
+        {
+            q.push(curr->right);
+            q.push(curr->left);
+            to.write(curr->data.c_str(), curr->data.size());
+        }
+        
+    }
     // to << '\n';
     char c;
     std::string temp;
@@ -132,9 +131,55 @@ bool Huffman::exportAt(std::ifstream &from, std::ofstream &to)
     std::cout << "\n";
     buf.print();
     buf.writeTo(to);
-    // to.write((char *)&num, sizeof(num));
 
     return true;
+}
+
+bool Huffman::deserialize(std::ifstream &from, std::ofstream &to)
+{
+    root = decerializeHelper(from);
+
+    char c;
+    Node *current = root;
+    while (from.get(c))
+    {
+        for (int i = 7; i >= 0; i--)
+        {
+            if(((c >> i) & 1) == 0)
+            {
+                current = current->left;
+            }
+            else
+            {
+                current = current->right;
+            }
+
+            if(current->left == nullptr && current->right == nullptr)
+            {
+                to << current->data;
+                current = root;
+            }
+        }
+        std::cout << " ";
+    }
+
+    return true;
+}
+
+Huffman::Node *Huffman::decerializeHelper(std::ifstream &stream)
+{
+    std::string temp;
+    char c;
+    stream >> c;
+    if(c == '~') 
+    {
+        return new Node {0, "~", decerializeHelper(stream), decerializeHelper(stream)};
+    }
+    else
+    {
+        temp = c;
+        return new Node {0, temp, nullptr, nullptr};
+    }
 }
 
 Huffman::~Huffman()

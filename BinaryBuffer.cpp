@@ -4,8 +4,6 @@
 void BinaryBuffer::shiftLeft()
 {
     if(buffer.empty()) buffer.push_back(0);
-    // print();
-    // std::cout << std::endl;
 
     if(index >= 7) 
     {
@@ -63,22 +61,29 @@ void BinaryBuffer::operator +=(const BinaryBuffer &other)
 
     for(int i=0; i < other.buffer.size() - 1; i++)
     {
-        unsigned char c = 128;
-        for(int j=0; j < 8; j++)
-        {
-            if((other.buffer[i] & c) / c == 1)
-            {
-                operator ++();
-            }
-            shiftLeft();
-            c >>= 1;
-        }
+        writeByte(other.buffer[i]);
     }
 
     unsigned char c = 1 << other.index;
     for(int j=0; j < other.index; j++)
     {
         if((other.buffer.back() & c) / c == 1)
+        {
+            operator ++();
+        }
+        shiftLeft();
+        c >>= 1;
+    }
+}
+
+void BinaryBuffer::writeByte(const char &byte)
+{
+    if(buffer.size() == 0) buffer.push_back(0);
+
+    unsigned char c = 128;
+    for(int j=0; j < 8; j++)
+    {
+        if((byte & c) / c == 1)
         {
             operator ++();
         }
@@ -121,4 +126,9 @@ void BinaryBuffer::print() const
         std::cout << (buffer.back() & c) / c;
         c >>= 1;
     }
+}
+
+int BinaryBuffer::numBits()
+{
+    return (buffer.size() - 1) * 8 + index;
 }

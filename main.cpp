@@ -44,32 +44,19 @@ int main(int argc, char** argv)
         table.addSymbol(iFile);
         table.createTree();
         // table.printTree();
-        table.exportAt(iFile, oFile);
+        table.serialize(iFile, oFile);
         iFile.close();
         oFile.close();
-
-        std::cout << '\n';
-        std::ifstream iFile2(outputName, std::ios::binary | std::ios::in);
-        char c;
-        while (iFile2.get(c))
-        {
-            for (int i = 7; i >= 0; i--)
-                std::cout << ((c >> i) & 1);
-            std::cout << " ";
-        }
         break;
     }
     case Mode::Decompression:
     {
-        BinaryBuffer buf;
         std::cout << "DECOMPRESSING" << std::endl;
-        for(int i = 0; i < 10; i++)
-        {
-            ++buf;
-            buf <<= 3;
-        }
 
-        buf.print();
+        std::ifstream iFile(fileName, std::ios::binary | std::ios::in);
+        std::ofstream oFile(outputName);
+
+        table.deserialize(iFile, oFile);
         break;
     }
     case Mode::Debug:
