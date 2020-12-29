@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 #include "Huffman.h"
 
 
@@ -23,7 +24,6 @@ int main(int argc, char** argv)
             mode = Mode::Debug;
         } else if(strcmp(argv[i], "-i") == 0)
         {
-            
             fileName = argv[++i];
         } else if(strcmp(argv[i], "-o") == 0)
         {
@@ -39,6 +39,7 @@ int main(int argc, char** argv)
     {
     case Mode::Comression:
     {
+        std::cout << "COMPRESSING" << std::endl;
         std::ifstream iFile(fileName);
         std::ofstream oFile(outputName, std::ios::binary | std::ios::out);
         table.addSymbol(iFile);
@@ -60,23 +61,23 @@ int main(int argc, char** argv)
         break;
     }
     case Mode::Debug:
+    {
+        std::ifstream iFile(fileName);
+        table.addSymbol(iFile);
+        table.createTree();
+        table.printTree();
+        table.setDebug(true);
+        std::stringstream temp;
+        table.serialize(iFile, temp);
+        iFile.close();
         
         break;
+    }
     case Mode::Adaptive:
         
         break;
     default:
         break;
     }
-
-    // table.addSymbol("a", 5);
-    // table.addSymbol("b", 2);
-    // table.addSymbol("c");
-    // table.addSymbol("d");
-    // table.addSymbol("r", 2);
-    // table.createTree();
-    // table.printTree();
-
-    // table.print();
     return 0;
 }

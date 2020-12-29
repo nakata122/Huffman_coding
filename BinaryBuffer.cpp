@@ -92,7 +92,7 @@ void BinaryBuffer::writeByte(const char &byte)
     }
 }
 
-void BinaryBuffer::writeTo(std::ofstream &stream)
+void BinaryBuffer::writeTo(std::ostream &stream)
 {
     if(buffer.empty()) return;
 

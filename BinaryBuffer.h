@@ -19,7 +19,7 @@ public:
     int numBits();
     void operator +=(const BinaryBuffer &);
     void writeByte(const char &);
-    void writeTo(std::ofstream &);
+    void writeTo(std::ostream &);
     void print() const;
 };
 

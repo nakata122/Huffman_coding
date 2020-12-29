@@ -18,13 +18,14 @@ public:
 
 private:
     Node *root = nullptr;
-    int numNodes = 0;
+    bool debug = false;
+
     std::unordered_map<std::string, int> alphabet;
     std::unordered_map<std::string, BinaryBuffer> lookup;
 
     void printHelper(Node *, std::string trace);
     void lookupHelper(Node *, BinaryBuffer trace, bool first);
-    Node *decerializeHelper(std::ifstream &);
+    Node *decerializeHelper(std::istream &);
 public:
     Huffman() : root(nullptr) {};
     Huffman(const Huffman &);
@@ -32,12 +33,13 @@ public:
     ~Huffman();
 
     void createTree();
-    void addSymbol(std::ifstream &);
+    void addSymbol(std::istream &);
     void addSymbol(const std::string &);
     void addSymbol(const std::string &, const int);
-    bool serialize(std::ifstream &, std::ofstream &);
-    bool deserialize(std::ifstream &, std::ofstream &);
+    bool serialize(std::istream &, std::ostream &);
+    bool deserialize(std::istream &, std::ostream &);
     void printTree();
+    void setDebug(bool);
 };
 
 #endif
