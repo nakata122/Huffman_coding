@@ -12,7 +12,7 @@ public:
     struct Node
     {
         int priority;
-        std::string data;
+        char data;
         Node *left, *right;
     };
 
@@ -20,8 +20,8 @@ private:
     Node *root;
     bool debug;
 
-    std::unordered_map<std::string, int> alphabet;
-    std::unordered_map<std::string, BinaryBuffer> lookup;
+    std::unordered_map<char, int> alphabet;
+    std::unordered_map<char, BinaryBuffer> lookup;
 
     Node *copyHelper(Node *);
     void printHelper(Node *, std::string trace);
@@ -36,8 +36,8 @@ public:
 
     void createTree();
     void addSymbol(std::istream &);
-    void addSymbol(const std::string &);
-    void addSymbol(const std::string &, const int);
+    void addSymbol(const char &);
+    void addSymbol(const char &, const int);
     bool serialize(std::istream &, std::ostream &);
     bool deserialize(std::istream &, std::ostream &);
     void printTree();

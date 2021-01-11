@@ -40,6 +40,7 @@ void PriorityQueue<T,Comp>::insert(T &data, Node *&at)
 {
     Node **curr = &at;
     Comp compare;
+    //Търсим елемент, който чупи условието compare
     while(*curr != nullptr && compare(data, (*curr)->data))
     {
         if((*curr)->side)
@@ -54,11 +55,12 @@ void PriorityQueue<T,Comp>::insert(T &data, Node *&at)
         }
     }
 
+    //Намерили сме и този елемент е листо. Можем да го запишем там
     if((*curr) == nullptr)
     {
         *curr = new Node {data, true, nullptr, nullptr};
     }
-    else
+    else //Трябва да се разместват елементи. Спрямо това дали завиваме наляво или надясно се пуска рекурсивно надолу разместването
     {
         T temp = (*curr)->data;
         (*curr)->data = data;
@@ -98,22 +100,24 @@ template <class T, class Comp>
 void PriorityQueue<T,Comp>::popHelper(Node *&curr)
 {
     Comp compare;
-    if(curr->left == nullptr && curr->right == nullptr)
+    if(curr->left == nullptr && curr->right == nullptr) //Листо
     {
         delete curr;
         curr = nullptr;
     }
-    else if(curr->left == nullptr)
+    else if(curr->left == nullptr) //Лявото поддърво е празно. Можем да заменим с дясното
     {
-        curr->data = curr->right->data;
-        popHelper(curr->right);
+        Node *temp = curr->right;
+        delete curr;
+        curr = temp;
     }
-    else if(curr->right == nullptr)
+    else if(curr->right == nullptr) //Дясното поддърво е празно. Можем да заменим с лявото
     {
-        curr->data = curr->left->data;
-        popHelper(curr->left);
+        Node *temp = curr->left;
+        delete curr;
+        curr = temp;
     }
-    else
+    else //И двете дървета имат нещо. Трябва да проверим по кой път да тръгнем
     {
         if(compare(curr->right->data, curr->left->data))
         {

@@ -42,31 +42,29 @@ Huffman::Node *Huffman::copyHelper(Huffman::Node *other)
 void Huffman::addSymbol(std::istream &stream)
 {
     char c;
-    std::string temp;
     while (stream.get(c))
     {
-        temp = c;
-        alphabet[temp]++;
+        alphabet[c]++;
     }
     
     stream.clear();
     stream.seekg(0);
 }
 
-void Huffman::addSymbol(const std::string &key)
+void Huffman::addSymbol(const char &key)
 {
     alphabet[key]++;
 }
 
-void Huffman::addSymbol(const std::string &key, const int amount)
+void Huffman::addSymbol(const char &key, const int amount)
 {
     alphabet[key] += amount;
 }
 
 void Huffman::createTree()
 {
-    std::priority_queue<Node *, std::vector<Node *>, Compare> q;
-    // PriorityQueue<Node *, Compare> q;
+    // std::priority_queue<Node *, std::vector<Node *>, Compare> q;
+    PriorityQueue<Node *, Compare> q;
 
     for(auto &item : alphabet)
     {
@@ -81,7 +79,7 @@ void Huffman::createTree()
         q.pop();
         Node *right = q.top();
         q.pop();
-        Node *curr = new Node {left->priority + right->priority, "~", left, right};
+        Node *curr = new Node {left->priority + right->priority, '~', left, right};
         q.push(curr);
     }
 
@@ -130,12 +128,11 @@ bool Huffman::serialize(std::istream &from, std::ostream &to)
         {
             q.push(curr->right);
             q.push(curr->left);
-            to.write(curr->data.c_str(), curr->data.size());
+            to.write((char*)&curr->data, sizeof(char));
         }
     }
     
     char c;
-    std::string temp;
     int count = 0;
     char num;
     BinaryBuffer buf;
@@ -143,8 +140,7 @@ bool Huffman::serialize(std::istream &from, std::ostream &to)
     //Записване на битовете последователно в буфера
     while (from.get(c))
     {
-        temp = c;
-        buf += lookup[temp];
+        buf += lookup[c];
     }
 
     if(debug)
@@ -166,9 +162,16 @@ bool Huffman::deserialize(std::istream &from, std::ostream &to)
 
     char c;
     Node *current = root;
-    while (from.get(c))
+    char index, offset = 0;
+    from.get(index);
+    //Обхождане на дървото бит по бит
+    while (from.get(c) )
     {
-        for (int i = 7; i >= 0; i--)
+        if(from.peek() == EOF) 
+        {
+            offset = 8 - index;
+        }
+        for (int i = 7; i >= offset; i--)
         {
             if(((c >> i) & 1) == 0)
             {
@@ -186,23 +189,22 @@ bool Huffman::deserialize(std::istream &from, std::ostream &to)
             }
         }
     }
+    
 
     return true;
 }
 
 Huffman::Node *Huffman::decerializeHelper(std::istream &stream)
 {
-    std::string temp;
     char c;
     stream.get(c);
     if(c == '~') //Специален символ, означаващ Node
     {
-        return new Node {0, "~", decerializeHelper(stream), decerializeHelper(stream)};
+        return new Node {0, '~', decerializeHelper(stream), decerializeHelper(stream)};
     }
     else //Иначе е листо
     {
-        temp = c;
-        return new Node {0, temp, nullptr, nullptr}; 
+        return new Node {0, c, nullptr, nullptr}; 
     }
 }
 

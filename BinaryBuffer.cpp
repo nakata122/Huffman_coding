@@ -98,13 +98,13 @@ void BinaryBuffer::writeTo(std::ostream &stream)
 {
     if(buffer.empty()) return;
 
+    stream.write((char *)&index, sizeof(char));
     for(int i=0; i < buffer.size() - 1;i++)
     {
         stream.write((char *)&buffer[i], sizeof(char));
     }
     char lastByte = buffer.back() << (7 - index);
     stream.write((char *)&lastByte, sizeof(char));
-
 }
 
 void BinaryBuffer::print() const

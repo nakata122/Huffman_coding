@@ -8,14 +8,14 @@ class BinaryBuffer
 {
 private:
     std::vector<unsigned char> buffer; //Буфер за запазване на битове
-    int index = 0; //Брой битове заети в последния char
+    char index = 0; //Брой битове заети в последния char
 
     void shiftLeft(); //Помощна функция за shift left 1
     void shiftRight(); // Помощна функция за shift right 1
 public:
     BinaryBuffer &operator <<=(const size_t amount); 
     BinaryBuffer &operator >>=(const size_t amount);
-    BinaryBuffer &operator ++();
+    BinaryBuffer &operator ++(); //Събира последният бит на буфера с 1
     int numBits(); //Броя на заетите до сега битове
     void operator +=(const BinaryBuffer &); //Слепване на два битови буфера
     void writeByte(const char &); //Записване на цял байт
