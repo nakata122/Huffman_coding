@@ -17,17 +17,19 @@ public:
     };
 
 private:
-    Node *root = nullptr;
-    bool debug = false;
+    Node *root;
+    bool debug;
 
     std::unordered_map<std::string, int> alphabet;
     std::unordered_map<std::string, BinaryBuffer> lookup;
 
+    Node *copyHelper(Node *);
     void printHelper(Node *, std::string trace);
-    void lookupHelper(Node *, BinaryBuffer trace, bool first);
+    void lookupHelper(Node *, BinaryBuffer trace);
     Node *decerializeHelper(std::istream &);
+    void clearHelper(Node *);
 public:
-    Huffman() : root(nullptr) {};
+    Huffman() : root(nullptr), debug(false) {};
     Huffman(const Huffman &);
     Huffman &operator =(const Huffman &);
     ~Huffman();

@@ -59,12 +59,14 @@ void BinaryBuffer::operator +=(const BinaryBuffer &other)
 {
     if(other.buffer.size() == 0) return;
 
+    //Добавяне байт по байт данните от другия буфер
     for(int i=0; i < other.buffer.size() - 1; i++)
     {
         writeByte(other.buffer[i]);
     }
 
-    unsigned char c = 1 << other.index;
+    //Добавяне на последните останали битове от другия буфер
+    unsigned char c = 1 << other.index; //Битова маска, която сочи първият значещ бит от последния байт на другия буфер
     for(int j=0; j < other.index; j++)
     {
         if((other.buffer.back() & c) / c == 1)
@@ -80,15 +82,15 @@ void BinaryBuffer::writeByte(const char &byte)
 {
     if(buffer.size() == 0) buffer.push_back(0);
 
-    unsigned char c = 128;
+    unsigned char c = 128; //1000 0000 Битова маска за вземане на битовете от ляво на дясно
     for(int j=0; j < 8; j++)
     {
         if((byte & c) / c == 1)
         {
-            operator ++();
+            operator ++(); //Правим текущият бит 1 ако в другият байт е 1
         }
         shiftLeft();
-        c >>= 1;
+        c >>= 1; //Местене на маската
     }
 }
 
@@ -109,6 +111,7 @@ void BinaryBuffer::print() const
 {
     if(buffer.size() == 0) return;
 
+    //Принтиране на всички битове разделени по 8
     for(int i=0; i < buffer.size() - 1; i++)
     {
         unsigned char c = 128;
@@ -120,6 +123,7 @@ void BinaryBuffer::print() const
         std::cout << " ";
     }
 
+    //Принтиране на последният бит
     unsigned char c = 1 << index;
     for(int j=0; j < index; j++)
     {

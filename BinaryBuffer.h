@@ -10,17 +10,17 @@ private:
     std::vector<unsigned char> buffer; //Буфер за запазване на битове
     int index = 0; //Брой битове заети в последния char
 
-    void shiftLeft();
-    void shiftRight();
+    void shiftLeft(); //Помощна функция за shift left 1
+    void shiftRight(); // Помощна функция за shift right 1
 public:
-    BinaryBuffer &operator <<=(const size_t amount);
+    BinaryBuffer &operator <<=(const size_t amount); 
     BinaryBuffer &operator >>=(const size_t amount);
-    BinaryBuffer & operator ++();
-    int numBits();
-    void operator +=(const BinaryBuffer &);
-    void writeByte(const char &);
-    void writeTo(std::ostream &);
-    void print() const;
+    BinaryBuffer &operator ++();
+    int numBits(); //Броя на заетите до сега битове
+    void operator +=(const BinaryBuffer &); //Слепване на два битови буфера
+    void writeByte(const char &); //Записване на цял байт
+    void writeTo(std::ostream &); //Сериализация
+    void print() const; //Извеждане на конзолата в debug режим
 };
 
 #endif

@@ -5,10 +5,10 @@
 #include <sstream>
 #include "Huffman.h"
 
-
 int main(int argc, char** argv)
 {
-    enum Mode {Comression, Decompression, Adaptive, Debug};
+
+    enum Mode {Comression, Decompression, Adaptive, Debug}; //Различни режими за работа с програмата
     short mode = Mode::Comression;
     std::string fileName, outputName;
     for(int i=0; i < argc; i++)
@@ -44,7 +44,6 @@ int main(int argc, char** argv)
         std::ofstream oFile(outputName, std::ios::binary | std::ios::out);
         table.addSymbol(iFile);
         table.createTree();
-        // table.printTree();
         table.serialize(iFile, oFile);
         iFile.close();
         oFile.close();
